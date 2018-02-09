@@ -53,14 +53,14 @@ public class QuestionResource {
 		return Response.created(uri).build();
 	}
 
-	@Path("{id}/option/{optionCode}")
+	@Path("{id}/options/{optionCode}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Option getOption(@PathParam("id") String id, @PathParam("optionCode") String optionCode) {
 		return repository.getOption(id, optionCode);
 	}
 
-	@Path("{id}/option/{optionCode}")
+	@Path("{id}/options/{optionCode}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeOption(@PathParam("id") String id, @PathParam("optionCode") String optionCode) {
@@ -68,12 +68,12 @@ public class QuestionResource {
 		return removed ? Response.ok().build() : Response.noContent().build();
 	}
 
-	@Path("{id}/option")
+	@Path("{id}/options")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addQuestion(@PathParam("id") String id, Option option) {
+	public Response addOption(@PathParam("id") String id, Option option) {
 		option = repository.addOption(id, option);
-		URI uri = URI.create("/questions/" + id + "/option/" + option.getOptionCode());
+		URI uri = URI.create("/questions/" + id + "/options/" + option.getOptionCode());
 		return Response.created(uri).build();
 	}
 

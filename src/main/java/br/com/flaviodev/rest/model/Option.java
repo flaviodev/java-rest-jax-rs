@@ -4,15 +4,15 @@ public class Option {
 
 	private String id;
 	private String optionCode;
-	private String statementCode;
+	private String statementOption;
 
 	public Option() {
 
 	}
 
-	public Option(String optionCode, String statementCode) {
+	public Option(String statementOption, String optionCode) {
+		this.statementOption = statementOption;
 		this.optionCode = optionCode;
-		this.statementCode = statementCode;
 	}
 
 	public String getId() {
@@ -31,12 +31,12 @@ public class Option {
 		this.optionCode = optionCode;
 	}
 
-	public String getStatementCode() {
-		return statementCode;
+	public String getStatementOption() {
+		return statementOption;
 	}
 
-	public void setStatementCode(String statementCode) {
-		this.statementCode = statementCode;
+	public void setStatementCode(String statementOption) {
+		this.statementOption = statementOption;
 	}
 
 	@Override

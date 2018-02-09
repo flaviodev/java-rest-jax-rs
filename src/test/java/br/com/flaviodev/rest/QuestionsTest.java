@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.com.flaviodev.rest.model.Option;
 import br.com.flaviodev.rest.model.Question;
 
 public class QuestionsTest  {
@@ -67,9 +68,34 @@ public class QuestionsTest  {
 	}
 
 	@Test
+	public void serviceReturnOption() {
+		WebTarget target = client.target("http://localhost:8080");
+		Option option = target.path("/questions/1/options/A").request().get(Option.class);
+		Assert.assertEquals("option 1",option.getStatementOption());
+	}
+	
+	@Test
+	public void serviceIncludeOption() {
+		WebTarget target = client.target("http://localhost:8080");
+		Option option = new Option("Option 4", "D");
+		Response response = target.path("/questions/1/options").request().post(Entity.entity(option, MediaType.APPLICATION_JSON));
+		Assert.assertEquals(201, response.getStatus());
+		String location = response.getHeaderString("location");
+		Option optionReturned = client.target(location).request().get(Option.class);
+		Assert.assertEquals("D", optionReturned.getOptionCode());
+	}
+	
+	@Test
 	public void serviceDeleteQuestion() {
 		WebTarget target = client.target("http://localhost:8080");
-		Response response = target.path("/questions/4").request().delete();
+		Response response = target.path("/questions/3").request().delete();
 		Assert.assertEquals(200, response.getStatus());
+	}
+	
+	@Test
+	public void serviceUnregistredDeleteQuestion() {
+		WebTarget target = client.target("http://localhost:8080");
+		Response response = target.path("/questions/AZZZZZZ").request().delete();
+		Assert.assertEquals(204, response.getStatus());
 	}
 }
