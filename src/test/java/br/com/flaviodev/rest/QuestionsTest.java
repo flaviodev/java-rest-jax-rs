@@ -9,10 +9,8 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.client.ClientConfig;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -39,6 +37,13 @@ public class QuestionsTest  {
 	public void serviceReturnQuestion() {
 		WebTarget target = client.target("http://localhost:8080");
 		Question question = target.path("/questions/1").request().get(Question.class);
+		Assert.assertEquals(question.getId(), "1");
+	}
+
+	@Test
+	public void serviceReturnQuestionByQuery() {
+		WebTarget target = client.target("http://localhost:8080");
+		Question question = target.path("/questions/get").queryParam("id", "1").request().get(Question.class);
 		Assert.assertEquals(question.getId(), "1");
 	}
 	
