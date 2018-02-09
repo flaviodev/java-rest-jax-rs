@@ -37,14 +37,14 @@ public class QuestionsTest  {
 	public void serviceReturnQuestion() {
 		WebTarget target = client.target("http://localhost:8080");
 		Question question = target.path("/questions/1").request().get(Question.class);
-		Assert.assertEquals(question.getId(), "1");
+		Assert.assertEquals("1",question.getId());
 	}
 
 	@Test
 	public void serviceReturnQuestionByQuery() {
 		WebTarget target = client.target("http://localhost:8080");
 		Question question = target.path("/questions/get").queryParam("id", "1").request().get(Question.class);
-		Assert.assertEquals(question.getId(), "1");
+		Assert.assertEquals( "1", question.getId());
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ public class QuestionsTest  {
 		WebTarget target = client.target("http://localhost:8080");
 		Question question = new Question("1", "Question A", "AA");
 		Response response = target.path("/questions/1").request().put(Entity.entity(question, MediaType.APPLICATION_JSON));
-		Assert.assertEquals(response.getStatus(),202);
+		Assert.assertEquals(202,response.getStatus());
 	}
 
 	@Test
@@ -60,13 +60,16 @@ public class QuestionsTest  {
 		WebTarget target = client.target("http://localhost:8080");
 		Question question = new Question(null, "Question H", "AH");
 		Response response = target.path("/questions").request().post(Entity.entity(question, MediaType.APPLICATION_JSON));
-		Assert.assertEquals(response.getStatus(),201);
+		Assert.assertEquals(201, response.getStatus());
+		String location = response.getHeaderString("location");
+		Question questionReturned = client.target(location).request().get(Question.class);
+		Assert.assertEquals("AH", questionReturned.getAnswer());
 	}
 
 	@Test
 	public void serviceDeleteQuestion() {
 		WebTarget target = client.target("http://localhost:8080");
 		Response response = target.path("/questions/4").request().delete();
-		Assert.assertEquals(response.getStatus(), 200);
+		Assert.assertEquals(200, response.getStatus());
 	}
 }
