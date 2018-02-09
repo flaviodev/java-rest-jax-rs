@@ -15,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import br.com.flaviodev.rest.model.Option;
 import br.com.flaviodev.rest.model.Question;
 import br.com.flaviodev.rest.repository.QuestionRepository;
 import br.com.flaviodev.rest.repository.QuestionRepositoryImpl;
@@ -43,13 +44,36 @@ public class QuestionResource {
 	public Question getQuestionQuery(@QueryParam("id") String id) {
 		return repository.get(id);
 	}
-	
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response postQuestion(Question question) {
 		question = repository.save(question);
 		URI uri = URI.create("/questions/" + question.getId());
+		return Response.created(uri).build();
+	}
+
+	@Path("{id}/option/{optionCode}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Option getOption(@PathParam("id") String id, @PathParam("optionCode") String optionCode) {
+		return repository.getOption(id, optionCode);
+	}
+
+	@Path("{id}/option/{optionCode}")
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeOption(@PathParam("id") String id, @PathParam("optionCode") String optionCode) {
+		boolean removed = repository.removeOption(id, optionCode);
+		return removed ? Response.ok().build() : Response.noContent().build();
+	}
+
+	@Path("{id}/option")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addQuestion(@PathParam("id") String id, Option option) {
+		option = repository.addOption(id, option);
+		URI uri = URI.create("/questions/" + id + "/option/" + option.getOptionCode());
 		return Response.created(uri).build();
 	}
 

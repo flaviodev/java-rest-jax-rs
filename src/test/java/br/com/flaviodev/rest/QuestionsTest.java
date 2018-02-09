@@ -50,7 +50,7 @@ public class QuestionsTest  {
 	@Test
 	public void serviceAlterQuestion() {
 		WebTarget target = client.target("http://localhost:8080");
-		Question question = new Question("1", "Question A", "AA");
+		Question question = new Question("1", "Question A", "B");
 		Response response = target.path("/questions/1").request().put(Entity.entity(question, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(202,response.getStatus());
 	}
@@ -58,12 +58,12 @@ public class QuestionsTest  {
 	@Test
 	public void serviceIncludeQuestion() {
 		WebTarget target = client.target("http://localhost:8080");
-		Question question = new Question(null, "Question H", "AH");
+		Question question = new Question(null, "Question H", "A");
 		Response response = target.path("/questions").request().post(Entity.entity(question, MediaType.APPLICATION_JSON));
 		Assert.assertEquals(201, response.getStatus());
 		String location = response.getHeaderString("location");
 		Question questionReturned = client.target(location).request().get(Question.class);
-		Assert.assertEquals("AH", questionReturned.getAnswer());
+		Assert.assertEquals("A", questionReturned.getCorrectOptionCode());
 	}
 
 	@Test
